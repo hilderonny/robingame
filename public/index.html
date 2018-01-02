@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html manifest="/cache.manifest">
+<html manifest="/nix.cache.manifest">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" href="css/index.css">
-        <script src="scripts/index.js"></script>
         <title>RobinGame</title>
     </head>
     <body>
 
-        <div class="app">
+        <div class="app" id="app">
 
             <div class="points" id="points"></div>
 
@@ -20,6 +19,8 @@
         </div>
 
         <audio src="overworld.mp3" id="music" autoplay loop></audio>
+
+        <script src="scripts/index.js"></script>
 
     </body>
 </html>
