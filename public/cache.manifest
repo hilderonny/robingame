@@ -1,0 +1,12 @@
+CACHE MANIFEST
+#v18
+
+#CACHE:
+NETWORK:
+index.html
+css/index.css
+images/bg1.png
+images/bg2.png
+images/mario.gif
+scripts/index.js
+overworld.mp3
