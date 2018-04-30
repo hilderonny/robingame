@@ -17,7 +17,7 @@
     <script>
         var view = new ol.View({
             center: [0, 0],
-            zoom: 2 //19
+            zoom: 17
         });
 
         // var vectorSource = new ol.source.Vector({
@@ -44,156 +44,265 @@
         //     strategy: ol.loadingstrategy.bbox
         // });
 
-        var image = new ol.style.Circle({
-            radius: 5,
-            fill: null,
-            stroke: new ol.style.Stroke({ color: 'red', width: 1 })
-        });
+        // var image = new ol.style.Circle({
+        //     radius: 5,
+        //     fill: null,
+        //     stroke: new ol.style.Stroke({ color: 'red', width: 1 })
+        // });
 
-        var styles = {
-            'Point': new ol.style.Style({
-                image: image
-            }),
-            'LineString': new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'green',
-                    width: 1
-                })
-            }),
-            'MultiLineString': new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'green',
-                    width: 1
-                })
-            }),
-            'MultiPoint': new ol.style.Style({
-                image: image
-            }),
-            'MultiPolygon': new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'yellow',
-                    width: 1
-                }),
-                fill: new ol.style.Fill({
-                    color: 'rgba(255, 255, 0, 0.1)'
-                })
-            }),
-            'Polygon': new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'blue',
-                    lineDash: [4],
-                    width: 3
-                }),
-                fill: new ol.style.Fill({
-                    color: 'rgba(0, 0, 255, 0.1)'
-                })
-            }),
-            'GeometryCollection': new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'magenta',
-                    width: 2
-                }),
-                fill: new ol.style.Fill({
-                    color: 'magenta'
-                }),
-                image: new ol.style.Circle({
-                    radius: 10,
-                    fill: null,
-                    stroke: new ol.style.Stroke({
-                        color: 'magenta'
-                    })
-                })
-            }),
-            'Circle': new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'red',
-                    width: 2
-                }),
-                fill: new ol.style.Fill({
-                    color: 'rgba(255,0,0,0.2)'
-                })
-            })
-        };
+        // var styles = {
+        //     'Point': new ol.style.Style({
+        //         image: image
+        //     }),
+        //     'LineString': new ol.style.Style({
+        //         stroke: new ol.style.Stroke({
+        //             color: 'green',
+        //             width: 1
+        //         })
+        //     }),
+        //     'MultiLineString': new ol.style.Style({
+        //         stroke: new ol.style.Stroke({
+        //             color: 'green',
+        //             width: 1
+        //         })
+        //     }),
+        //     'MultiPoint': new ol.style.Style({
+        //         image: image
+        //     }),
+        //     'MultiPolygon': new ol.style.Style({
+        //         stroke: new ol.style.Stroke({
+        //             color: 'yellow',
+        //             width: 1
+        //         }),
+        //         fill: new ol.style.Fill({
+        //             color: 'rgba(255, 255, 0, 0.1)'
+        //         })
+        //     }),
+        //     'Polygon': new ol.style.Style({
+        //         stroke: new ol.style.Stroke({
+        //             color: 'blue',
+        //             lineDash: [4],
+        //             width: 3
+        //         }),
+        //         fill: new ol.style.Fill({
+        //             color: 'rgba(0, 0, 255, 0.1)'
+        //         })
+        //     }),
+        //     'GeometryCollection': new ol.style.Style({
+        //         stroke: new ol.style.Stroke({
+        //             color: 'magenta',
+        //             width: 2
+        //         }),
+        //         fill: new ol.style.Fill({
+        //             color: 'magenta'
+        //         }),
+        //         image: new ol.style.Circle({
+        //             radius: 10,
+        //             fill: null,
+        //             stroke: new ol.style.Stroke({
+        //                 color: 'magenta'
+        //             })
+        //         })
+        //     }),
+        //     'Circle': new ol.style.Style({
+        //         stroke: new ol.style.Stroke({
+        //             color: 'red',
+        //             width: 2
+        //         }),
+        //         fill: new ol.style.Fill({
+        //             color: 'rgba(255,0,0,0.2)'
+        //         })
+        //     })
+        // };
 
-        var styleFunction = function (feature) {
-            return styles[feature.getGeometry().getType()];
-        };
+        // var styleFunction = function (feature) {
+        //     return styles[feature.getGeometry().getType()];
+        // };
 
-        var geojsonObject = {
-            'type': 'FeatureCollection',
-            'features': [{
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [1000000, 5100000]
-                }
-            // }, {
-            //     'type': 'Feature',
-            //     'geometry': {
-            //         'type': 'LineString',
-            //         'coordinates': [[4e6, -2e6], [8e6, 2e6]]
-            //     }
-            // }, {
-            //     'type': 'Feature',
-            //     'geometry': {
-            //         'type': 'LineString',
-            //         'coordinates': [[4e6, 2e6], [8e6, -2e6]]
-            //     }
-            // }, {
-            //     'type': 'Feature',
-            //     'geometry': {
-            //         'type': 'Polygon',
-            //         'coordinates': [[[-5e6, -1e6], [-4e6, 1e6], [-3e6, -1e6]]]
-            //     }
-            // }, {
-            //     'type': 'Feature',
-            //     'geometry': {
-            //         'type': 'MultiLineString',
-            //         'coordinates': [
-            //             [[-1e6, -7.5e5], [-1e6, 7.5e5]],
-            //             [[1e6, -7.5e5], [1e6, 7.5e5]],
-            //             [[-7.5e5, -1e6], [7.5e5, -1e6]],
-            //             [[-7.5e5, 1e6], [7.5e5, 1e6]]
-            //         ]
-            //     }
-            // }, {
-            //     'type': 'Feature',
-            //     'geometry': {
-            //         'type': 'MultiPolygon',
-            //         'coordinates': [
-            //             [[[-5e6, 6e6], [-5e6, 8e6], [-3e6, 8e6], [-3e6, 6e6]]],
-            //             [[[-2e6, 6e6], [-2e6, 8e6], [0, 8e6], [0, 6e6]]],
-            //             [[[1e6, 6e6], [1e6, 8e6], [3e6, 8e6], [3e6, 6e6]]]
-            //         ]
-            //     }
-            // }, {
-            //     'type': 'Feature',
-            //     'geometry': {
-            //         'type': 'GeometryCollection',
-            //         'geometries': [{
-            //             'type': 'LineString',
-            //             'coordinates': [[-5e6, -5e6], [0, -5e6]]
-            //         }, {
-            //             'type': 'Point',
-            //             'coordinates': [4e6, -5e6]
-            //         }, {
-            //             'type': 'Polygon',
-            //             'coordinates': [[[1e6, -6e6], [2e6, -4e6], [3e6, -6e6]]]
-            //         }]
-            //     }
-            }]
-        };
+        // var geojsonObject = {
+        //     'type': 'FeatureCollection',
+        //     'features': [{
+        //         'type': 'Feature',
+        //         'geometry': {
+        //             'type': 'Point',
+        //             'coordinates': [11, 51]
+        //         }
+        //         // }, {
+        //         //     'type': 'Feature',
+        //         //     'geometry': {
+        //         //         'type': 'LineString',
+        //         //         'coordinates': [[4e6, -2e6], [8e6, 2e6]]
+        //         //     }
+        //         // }, {
+        //         //     'type': 'Feature',
+        //         //     'geometry': {
+        //         //         'type': 'LineString',
+        //         //         'coordinates': [[4e6, 2e6], [8e6, -2e6]]
+        //         //     }
+        //         // }, {
+        //         //     'type': 'Feature',
+        //         //     'geometry': {
+        //         //         'type': 'Polygon',
+        //         //         'coordinates': [[[-5e6, -1e6], [-4e6, 1e6], [-3e6, -1e6]]]
+        //         //     }
+        //         // }, {
+        //         //     'type': 'Feature',
+        //         //     'geometry': {
+        //         //         'type': 'MultiLineString',
+        //         //         'coordinates': [
+        //         //             [[-1e6, -7.5e5], [-1e6, 7.5e5]],
+        //         //             [[1e6, -7.5e5], [1e6, 7.5e5]],
+        //         //             [[-7.5e5, -1e6], [7.5e5, -1e6]],
+        //         //             [[-7.5e5, 1e6], [7.5e5, 1e6]]
+        //         //         ]
+        //         //     }
+        //         // }, {
+        //         //     'type': 'Feature',
+        //         //     'geometry': {
+        //         //         'type': 'MultiPolygon',
+        //         //         'coordinates': [
+        //         //             [[[-5e6, 6e6], [-5e6, 8e6], [-3e6, 8e6], [-3e6, 6e6]]],
+        //         //             [[[-2e6, 6e6], [-2e6, 8e6], [0, 8e6], [0, 6e6]]],
+        //         //             [[[1e6, 6e6], [1e6, 8e6], [3e6, 8e6], [3e6, 6e6]]]
+        //         //         ]
+        //         //     }
+        //         // }, {
+        //         //     'type': 'Feature',
+        //         //     'geometry': {
+        //         //         'type': 'GeometryCollection',
+        //         //         'geometries': [{
+        //         //             'type': 'LineString',
+        //         //             'coordinates': [[-5e6, -5e6], [0, -5e6]]
+        //         //         }, {
+        //         //             'type': 'Point',
+        //         //             'coordinates': [4e6, -5e6]
+        //         //         }, {
+        //         //             'type': 'Polygon',
+        //         //             'coordinates': [[[1e6, -6e6], [2e6, -4e6], [3e6, -6e6]]]
+        //         //         }]
+        //         //     }
+        //     }]
+        // };
 
-        var vectorSource = new ol.source.Vector({
-            features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
-        });
+        // var vectorSource = new ol.source.Vector({
+        //     features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+        // });
 
         // vectorSource.addFeature(new ol.Feature(new ol.geom.Circle([5e6, 7e6], 1e6)));
 
+        // var vectorLayer = new ol.layer.Vector({
+        //     projection: "EPSG:4326",
+        //     source: vectorSource,
+        //     style: styleFunction
+        // });
+
+        var styles = {
+            'amenity': {
+                '.*': new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(0,0,255, 1.0)',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(0,0,255, 0.9)'
+                    })
+                })
+            },
+            'building': {
+                '.*': new ol.style.Style({
+                    zIndex: 100,
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(255,0,0, 1.0)',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255,0,0, 0.9)'
+                    })
+                })
+            },
+            'highway': {
+                'service': new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(255, 255, 255, 1.0)',
+                        width: 2
+                    })
+                }),
+                '.*': new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(255, 255, 255, 1.0)',
+                        width: 3
+                    })
+                })
+            },
+            'landuse': {
+                'forest|grass|allotments': new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(255,255,0, 1.0)',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255,255,0, 0.9)'
+                    })
+                })
+            },
+            'natural': {
+                'tree': new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 2,
+                        fill: new ol.style.Fill({
+                            color: 'rgba(0,255,0, 1.0)'
+                        }),
+                        stroke: null
+                    })
+                })
+            }
+        };
+
+        var vectorSource = new ol.source.Vector({
+            format: new ol.format.OSMXML(),
+            loader: function (extent, resolution, projection) {
+                var epsg4326Extent =
+                    ol.proj.transformExtent(extent, projection, 'EPSG:4326');
+                var client = new XMLHttpRequest();
+                client.open('POST', 'https://overpass-api.de/api/interpreter');
+                client.addEventListener('load', function () {
+                    var features = new ol.format.OSMXML().readFeatures(client.responseText, {
+                        featureProjection: map.getView().getProjection()
+                    });
+                    vectorSource.addFeatures(features);
+                });
+                // var query = '(node(' +
+                //     epsg4326Extent[1] + ',' + epsg4326Extent[0] + ',' +
+                //     epsg4326Extent[3] + ',' + epsg4326Extent[2] +
+                //     ');rel(bn)->.foo;way(bn);node(w)->.foo;rel(bw););out meta;';
+                var query = '(node(' +
+                    epsg4326Extent[1] + ',' + epsg4326Extent[0] + ',' +
+                    epsg4326Extent[3] + ',' + epsg4326Extent[2] +
+                    // ');rel(bn)->.foo;way(bn);node(w)->.foo;rel(bw););out meta;';
+                    // ');rel(bn)->.foo;way(bn);node(w)->.foo;rel(bw););out meta;';
+                    ');rel(bn)->.foo;way(bn)[amenity];node(w)->.foo;rel(bw););out meta;';
+                client.send(query);
+            },
+            strategy: ol.loadingstrategy.bbox
+        });
+
         var vectorLayer = new ol.layer.Vector({
             source: vectorSource,
-            style: styleFunction
+            style: function (feature) {
+                for (var key in styles) {
+                    var value = feature.get(key);
+                    if (value !== undefined) {
+                        for (var regexp in styles[key]) {
+                            if (new RegExp(regexp).test(value)) {
+                                return styles[key][regexp];
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
         });
+
 
         var map = new ol.Map({
             layers: [
@@ -223,6 +332,17 @@
                 }
             }),
             view: view
+        });
+
+        map.on("click", function(event) {
+            var features = map.getFeaturesAtPixel(event.pixel);
+            if (features) features.forEach(function(f) {
+                var properties = f.getProperties();
+                console.log(properties);
+                if (properties.amenity) {
+                    console.log(properties.amenity, properties.name);
+                }
+            });
         });
 
         var geolocation = new ol.Geolocation({
