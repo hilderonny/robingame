@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Geolocation</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" href="ol.css" type="text/css">
+    <link rel="stylesheet" href="siedler.css" type="text/css">
+    <script src="ol.js"></script>
+</head>
+
+<body>
+    <div id="map" class="map"></div>
+    <script>
+        var view = new ol.View({
+            center: [0, 0],
+            zoom: 17
+        });
+
+        var styles = {
+            'amenity': {
+                '.*': new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(0,0,255, 1.0)',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(0,0,255, 0.9)'
+                    })
+                })
+            },
+            'building': {
+                '.*': new ol.style.Style({
+                    zIndex: 100,
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(255,0,0, 1.0)',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255,0,0, 0.9)'
+                    })
+                })
+            },
+            'highway': {
+                'service': new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(255, 255, 255, 1.0)',
+                        width: 2
+                    })
+                }),
+                '.*': new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(255, 255, 255, 1.0)',
+                        width: 3
+                    })
+                })
+            },
+            'landuse': {
+                'forest|grass|allotments': new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(255,255,0, 1.0)',
+                        width: 1
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255,255,0, 0.9)'
+                    })
+                })
+            },
+            'natural': {
+                'tree': new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 2,
+                        fill: new ol.style.Fill({
+                            color: 'rgba(0,255,0, 1.0)'
+                        }),
+                        stroke: null
+                    })
+                })
+            }
+        };
+
+        var vectorSource = new ol.source.Vector({
+            format: new ol.format.OSMXML(),
+            loader: function (extent, resolution, projection) {
+                var epsg4326Extent =
+                    ol.proj.transformExtent(extent, projection, 'EPSG:4326');
+                var client = new XMLHttpRequest();
+                client.open('POST', 'https://overpass-api.de/api/interpreter');
+                client.addEventListener('load', function () {
+                    var features = new ol.format.OSMXML().readFeatures(client.responseText, {
+                        featureProjection: map.getView().getProjection()
+                    });
+                    vectorSource.addFeatures(features);
+                });
+                var query = '(node(' +
+                    epsg4326Extent[1] + ',' + epsg4326Extent[0] + ',' +
+                    epsg4326Extent[3] + ',' + epsg4326Extent[2] +
+                    ');rel(bn)->.foo;way(bn)[amenity];node(w)->.foo;rel(bw););out meta;';
+                client.send(query);
+            },
+            strategy: ol.loadingstrategy.bbox
+        });
+
+        var vectorLayer = new ol.layer.Vector({
+            source: vectorSource,
+            style: function (feature) {
+                for (var key in styles) {
+                    var value = feature.get(key);
+                    if (value !== undefined) {
+                        for (var regexp in styles[key]) {
+                            if (new RegExp(regexp).test(value)) {
+                                return styles[key][regexp];
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+        });
+
+
+        var map = new ol.Map({
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.Stamen({
+                        layer: 'watercolor'
+                    })
+                }),
+                vectorLayer,
+            ],
+            target: 'map',
+            controls: ol.control.defaults({
+                attributionOptions: {
+                    collapsible: false
+                }
+            }),
+            view: view
+        });
+
+        map.on("click", function(event) {
+            var features = map.getFeaturesAtPixel(event.pixel);
+            if (features) features.forEach(function(f) {
+                var properties = f.getProperties();
+                console.log(properties);
+                if (properties.amenity) {
+                    console.log(properties.amenity, properties.name);
+                }
+            });
+        });
+
+        var geolocation = new ol.Geolocation({
+            projection: view.getProjection(),
+            trackingOptions: {
+                maximumAge: 10000,
+                enableHighAccuracy: true,
+                timeout: 600000
+            }
+
+        });
+
+        var accuracyFeature = new ol.Feature();
+        geolocation.on('change:accuracyGeometry', function () {
+            console.log(geolocation.getAccuracyGeometry());
+            accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+        });
+
+        var positionFeature = new ol.Feature();
+        positionFeature.setStyle(new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 6,
+                fill: new ol.style.Fill({
+                    color: '#3399CC'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#fff',
+                    width: 2
+                })
+            })
+        }));
+
+        geolocation.on('change:position', function () {
+            var coordinates = geolocation.getPosition();
+            positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+            view.setCenter(coordinates);
+        });
+
+        new ol.layer.Vector({
+            map: map,
+            source: new ol.source.Vector({
+                features: [accuracyFeature, positionFeature]
+            })
+        });
+
+        geolocation.setTracking(true);
+
+    </script>
+</body>
+
+</html>
