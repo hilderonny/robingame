@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="llqrcode.js"></script>
+    <script src="qrscanner.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #campreview {
+            width: 100%;
+            height: 100%;
+        }
+
+        #result {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(32, 16, 32, 0.8);
+            width: 100%;
+            color: white;
+            font-family: monospace;
+            padding: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <video id="campreview" autoplay></video>
+    <div id="result">nix</div>
+    <!-- <div id="qrcodescanner"></div>
+    <div id="message"></div> -->
+</body>
+<!-- <script>
+    window.onload = function () {
+        QRCodeScanner({
+            element: document.getElementById('qrcodescanner'),
+            width: 400,
+            height: 300,
+            onScanSuccess: function (result) {
+                console.log('Scan Success', result);
+                document.getElementById('message').textContent = result;
+            },
+            onScanError: function (error) {
+                console.log('Scan Error', error);
+                document.getElementById('message').textContent = 'No QR Code found';
+            }
+        });
+    }
+</script> -->
+
+</html>
