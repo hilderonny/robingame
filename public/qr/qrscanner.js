@@ -1,9 +1,24 @@
 var campreview, isrunning;
 
+function quersumme(zahlentext, maximum) {
+    var qs = 0;
+    for(var i = 0; i < zahlentext.length; i++) {
+        qs += parseInt(zahlentext[i]);
+    }
+    if (qs > maximum) qs = quersumme(qs.toString());
+    return qs;
+}
+
+function ordinalzahlen(text) {
+    var result = "";
+    for(var i = 0; i < text.length; i++) {
+        result += text.charCodeAt(i);
+    }
+    return result;
+}
+
 function start() {
     if (isrunning) return;
-
-    console.log("start");
 
     // Init camera
     campreview = document.querySelector('#campreview');
@@ -22,9 +37,17 @@ function start() {
     var context = canvas.getContext("2d");
 
     // Prepare QR reader from llqrcode
-    var resultdiv = document.querySelector('#result')
+    var resultdiv = document.querySelector('#result');
+    var caughtpokemon = document.querySelector('#caughtpokemon');
     qrcode.callback = function (result) {
-        resultdiv.innerHTML = result;
+        var ordinal = ordinalzahlen(result);
+        var qs = quersumme(ordinal, 807); // Mit Ultrasonne sind es 807 Pokemon
+        // Ausgabe
+        var number = "000" + qs;
+        number = number.substring(number.length - 3);
+        var src = "pokemon/" + number + ".png";
+        caughtpokemon.src = src;
+        resultdiv.innerHTML = result + " - " + ordinal + " - " + qs + " - " + src;
     };
 
     // Trigger scan
