@@ -4,13 +4,13 @@ about: Beschreibe ein Feature
 
 ---
 
-**Grund der Aufgabe**
+**Herleitung**
 Z.B. Mir ist aufgefallen, dass ... und es wäre schön, wenn ...
 
-**Beschreibe die erwartete Lösung**
+**Erwartete Lösung**
 Ich stelle mir das später so vor ...
 
-**Führe mögliche Lösungsansätze auf**
+**Mögliche Lösungsansätze**
 Verweise zu anderen Softwarelösungen, die sowas ähnliches schon haben, damit man sich das besser vorstellen kann.
 
 **Zusätzliche Infos**
