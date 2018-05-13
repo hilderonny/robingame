@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Display a map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #copy {
+            width: 4096px;
+            height: 4096px;
+        }
+
+        #map {
+            width: 4096px;
+            height: 4096px;
+            visibility: hidden;
+            position: absolute;
+            left: -200%;
+            top:-200%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id='map'></div>
+    <canvas id="copy" width="4096" height="4096"></canvas>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiaGlsZGVyb25ueSIsImEiOiJjamg0cDVsczUweDFxMzNsbnl5M2Jtdjd0In0.quEIdB6c02FYsvPhR8hfdw';
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+            center: [11.06055,50.988], // starting position [lng, lat]
+            zoom: 17 // starting zoom
+        });
+
+        var targetcanvas = document.getElementById("copy");
+
+        map.on("render", function() {
+            targetcanvas.getContext('2d').drawImage(map.getCanvas(), 0, 0);    
+        });
+    </script>
+
+</body>
+
+</html>
