@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        * { margin:0;padding: 0;}
+        img { display: block;}
+        tr { display: block;white-space: nowrap;}
+        td {width:512px;height:512px;overflow:hidden;display: inline-block;}
+    </style>
+    <script>
+
+        function mapurl(lat, lon, zoom) {
+            var url = "https://maps.googleapis.com/maps/api/staticmap?";
+            var params = [
+                "center=" + lat + "," + lon,
+                "zoom=" + zoom,
+                "size=512x542",
+                "maptype=roadmap",
+                "style=element:labels%7Cvisibility:off",
+                "style=feature:administrative%7Cvisibility:off",
+                "style=feature:administrative.land_parcel%7Cvisibility:off",
+                "style=feature:administrative.neighborhood%7Cvisibility:off",
+                "style=feature:landscape%7Celement:geometry.fill%7Ccolor:0x9ef0da%7Cvisibility:on",
+                "style=feature:landscape%7Celement:geometry.stroke%7Ccolor:0xb7dfc0%7Cvisibility:on",
+                "style=feature:landscape.man_made%7Celement:geometry.fill%7Ccolor:0xbdffb8%7Cvisibility:on",
+                "style=feature:landscape.man_made%7Celement:geometry.stroke%7Ccolor:0xb7dfc0%7Cvisibility:on",
+                "style=feature:poi%7Cvisibility:off",
+                "style=feature:road%7Celement:geometry%7Ccolor:0x529684%7Cvisibility:on",
+                "style=feature:road%7Celement:geometry.stroke%7Ccolor:0xffff90%7Cvisibility:on",
+                "style=feature:transit%7Cvisibility:off",
+                "key=AIzaSyAHEA7xh4Hdkmdl46XN809BrSmqK8dRJp0"
+            ];
+            return url + params.join("&");
+        }
+
+        function addmap(lat, lon, zoom) {
+            var img = document.createElement("img");
+            img.src = mapurl(lat, lon, zoom);
+            document.body.appendChild(img);
+        }
+
+        function addmaptable(lat, lon, radius) {
+            var table = document.createElement("table");
+            table.setAttribute("cellpadding", "0");
+            table.setAttribute("cellspacing", "0");
+            var deltax = 0.0055;
+            var deltay = 0.003456;
+            var s = -(radius-1)/2;
+            for (var y = s; y < s + radius; y++) {
+                var row = document.createElement("tr");
+                table.appendChild(row);
+                for (var x = s; x < s + radius; x++) {
+                    var cell = document.createElement("td");
+                    row.appendChild(cell);
+                    var img = document.createElement("img");
+                    img.src = mapurl(lat - (y * deltay), lon + (x * deltax), 17);
+                    cell.appendChild(img);
+                }
+            }
+            document.body.appendChild(table);
+        }
+
+        window.addEventListener("load", function() {
+            // addmap(50.9908254, 11.0605541, 18);
+            // addmap(50.991455, 11.06055, 17);
+            // addmap(50.988, 11.06055, 17);
+            addmaptable(50.988, 11.06055, 5);
+        });
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
