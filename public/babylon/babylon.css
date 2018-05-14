@@ -12,3 +12,12 @@ body {
     height: 100%;
     touch-action: none;
 }
+
+#map {
+    width: 8192px;
+    height: 8192px;
+    visibility: hidden;
+    position: absolute;
+    left: -200%;
+    top:-200%;
+}
