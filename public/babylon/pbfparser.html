@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        #map {
+            background-color: aqua;
+        }
+    </style>
+    <script src="pbf.js"></script>
+    <script src="vectortiles.js"></script>
+    <script>
+
+        function drawPolygon(context, points, fillStyle, type) {
+            if (!points.length) return;
+            var oldfillstyle = context.fillStyle;
+            context.fillStyle = fillStyle;
+            context.beginPath();
+            context.moveTo(points[0].x, points[0].y);
+            for (var i = 1; i < points.length; i++) {
+                var point = points[i];
+                context.lineTo(point.x, point.y);
+            }
+            switch (type) {
+                case "polygon": context.closePath(); context.fill(); break;
+                case "line": context.stroke(); break;
+            }
+            
+            context.fillStyle = oldfillstyle;
+        }
+
+        function drawLayerFeatures(context, layer, fillStyle, type) {
+            for (var i = 0; i < layer.features.length; i++) {
+                var feature = layer.feature(i);
+                var geometries = feature.geometry();
+                geometries.forEach(function (geometry) {
+                    drawPolygon(context, geometry, fillStyle, type);
+                });
+            }
+        }
+
+        window.addEventListener("load", function () {
+
+            var canvas = document.getElementById("map");
+            var context = canvas.getContext('2d');
+
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'arraybuffer';
+            xhr.onreadystatechange = function () {
+
+                if (this.readyState !== 4 || this.status !== 200) return;
+
+                var buffer = new Uint8Array(xhr.response);
+
+                // See https://github.com/mapbox/pbf
+                var pbf = new Pbf(buffer);
+
+                // pbf.readFields(readTile, {});
+
+                var vectortile = new VectorTile(pbf);
+
+                console.log(vectortile);
+                console.log(Object.keys(vectortile.layers));
+
+                drawLayerFeatures(context, vectortile.layers.building, "#f00", "polygon");
+                drawLayerFeatures(context, vectortile.layers.road, "#ff0", "line");
+
+            }
+            xhr.open("GET", "https://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v7/16/34781/21943.vector.pbf?access_token=pk.eyJ1IjoiaGlsZGVyb25ueSIsImEiOiJjamg0cDVsczUweDFxMzNsbnl5M2Jtdjd0In0.quEIdB6c02FYsvPhR8hfdw", true);
+            xhr.send();
+        });
+    </script>
+
+</head>
+
+<body>
+    <p>See console!</p>
+    <canvas id="map" width="4096" height="4096"></canvas>
+</body>
+
+</html>
