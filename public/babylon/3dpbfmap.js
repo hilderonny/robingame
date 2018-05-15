@@ -89,7 +89,7 @@ var createScene = function (canvas, engine) {
 
 function drawLine(points, scene) {
     var babPoints = points.map(function(p) {
-        return new BABYLON.Vector3(p.x / 100 - 20, 0, p.y / 100 - 20);
+        return new BABYLON.Vector3(p.x / 100 - 20, 0, -p.y / 100 + 20);
     });
     var lines = BABYLON.MeshBuilder.CreateLines("lines", {points: babPoints}, scene);
     lines.color = new BABYLON.Color3(1, 1, 0);
@@ -97,7 +97,7 @@ function drawLine(points, scene) {
 
 function drawPolygon(points, scene, extrusion) {
     var babPoints = points.map(function(p) {
-        return new BABYLON.Vector3(p.x / 100 - 20, 0, p.y / 100 - 20);
+        return new BABYLON.Vector3(p.x / 100 - 20, 0, -p.y / 100 + 20);
     });
     var polygon = BABYLON.MeshBuilder.ExtrudePolygon("polygon", {shape: babPoints, sideOrientation: BABYLON.Mesh.DOUBLESIDE, depth: extrusion/10}, scene);
     polygon.position.y += extrusion / 10;
