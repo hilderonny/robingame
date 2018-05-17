@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="babylon.css">
+    <script src="/scripts/babylon.js"></script>
+    <script>
+        var createScene = function (canvas, engine) {
+
+            var scene = new BABYLON.Scene(engine);
+
+            var camera = new BABYLON.ArcRotateCamera("Camera", 3 * Math.PI / 2, 3 * Math.PI / 8, 30, BABYLON.Vector3.Zero(), scene);
+            camera.attachControl(canvas, true);
+
+            var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+
+            var ground = BABYLON.Mesh.CreateGround("ground1", 20, 20, 1, scene);
+            var grassMaterial = new BABYLON.StandardMaterial("grassMaterial", scene);
+            grassMaterial.specularColor = BABYLON.Color3.Black();
+            grassMaterial.diffuseTexture = new BABYLON.Texture("textures/grass/texture.png", scene);
+            grassMaterial.diffuseTexture.uScale = 1;//Repeat 5 times on the Vertical Axes
+            grassMaterial.diffuseTexture.vScale = 1;//Repeat 5 times on the Horizontal Axes
+            grassMaterial.bumpTexture = new BABYLON.Texture("textures/grass/normal.png", scene);
+            ground.material = grassMaterial;
+
+            return scene;
+        };
+
+        window.addEventListener("load", function () {
+            var canvas = document.getElementById("renderCanvas");
+            var engine = new BABYLON.Engine(canvas, true);
+            var scene = createScene(canvas, engine);
+            window.addEventListener("resize", () => { engine.resize(); });
+            engine.runRenderLoop(() => { scene.render(); });
+        });
+    </script>
+
+</head>
+
+<body>
+    <canvas id="renderCanvas" touch-action="none"></canvas>
+</body>
+
+</html>
