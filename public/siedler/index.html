@@ -32,10 +32,10 @@
         var viewer = new Cesium.Viewer('cesiumContainer', {
             animation: false,
             baseLayerPicker: false,
-            fullscreenButton: false,
-            vrButton: false,
+            fullscreenButton: true,
+            vrButton: true,
             geocoder: false,
-            homeButton: false,
+            homeButton: true,
             infoBox: false,
             sceneModePicker: false,
             selectionIndicator: false,
@@ -50,24 +50,32 @@
             terrainProvider: Cesium.createWorldTerrain(),
         });
 
-        navigator.geolocation.watchPosition(function (position) {
+        function flyToGeoLocation(geolocation) {
             var pointOfInterest = Cesium.Cartographic.fromDegrees(
-                position.coords.longitude,
-                position.coords.latitude,
+                geolocation.coords.longitude,
+                geolocation.coords.latitude,
                 1000.0,
                 new Cesium.Cartographic());
             Cesium.sampleTerrain(viewer.terrainProvider, 9, [pointOfInterest]).then(function (samples) {
                 var height = samples && samples[0] && samples[0].height ? samples[0].height : 0.0;
                 viewer.camera.flyTo({
                     destination: Cesium.Cartesian3.fromDegrees(
-                        position.coords.longitude,
-                        position.coords.latitude,
+                        geolocation.coords.longitude,
+                        geolocation.coords.latitude,
                         height + 500)
                 });
             });
-        });
+        }
+
+        function goHome() {
+            navigator.geolocation.getCurrentPosition(flyToGeoLocation);
+        }
 
         viewer.scene.fog.density = 0.02;
+
+        viewer.camera.flyHome = goHome;
+
+        goHome();
 
     </script>
 </body>
