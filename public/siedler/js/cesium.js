@@ -26,14 +26,17 @@ class App {
             // terrainProvider: Cesium.createWorldTerrain(),
         });
         this.viewer.scene.fog.density = 0.02;
-        this.viewer.camera.flyHome = this.goToPlayerPosition;
-        this.goToPlayerPosition();
-
+        var self = this;
+        this.viewer.camera.flyHome = function() {
+            self.goToPlayerPosition();
+        };
+        
         this.playerRadius = this.viewer.entities.add({
             position: Cesium.Cartesian3.fromDegrees(0, 0),
             ellipse: {
                 semiMinorAxis: 50.0,
                 semiMajorAxis: 50.0,
+                height: 0.1,
                 material: Cesium.Color.BLUE.withAlpha(0.3)
             }
         });
@@ -43,6 +46,7 @@ class App {
             ellipse: {
                 semiMinorAxis: 2.0,
                 semiMajorAxis: 2.0,
+                height: 0.2,
                 material: new Cesium.ImageMaterialProperty({
                     image: "geolocation_marker.png",
                     transparent: true,
@@ -65,7 +69,7 @@ class App {
             destination: Cesium.Cartesian3.fromDegrees(
                 geolocation.coords.longitude,
                 geolocation.coords.latitude,
-                300
+                200
                 // height + 500
             )
         });
@@ -73,20 +77,19 @@ class App {
     }
 
     goToPlayerPosition() {
-        var self = this;
-        navigator.geolocation.getCurrentPosition(function (geolocation) {
-            self.flyToGeoLocation(geolocation);
-        });
+        console.log(this.playerLocation);
+        if (this.playerLocation) this.flyToGeoLocation(this.playerLocation);
     }
 
     updatePlayerPosition(geolocation) {
+        this.playerLocation = geolocation;
         var position = Cesium.Cartesian3.fromDegrees(
             geolocation.coords.longitude,
             geolocation.coords.latitude,
-            0
+            0.1
         );
-        this.playerRadius.position = position;
-        this.playerSpot.position = position;
+        this.playerRadius.position = Cesium.Cartesian3.fromDegrees(geolocation.coords.longitude, geolocation.coords.latitude, 0.1);
+        this.playerSpot.position = Cesium.Cartesian3.fromDegrees(geolocation.coords.longitude, geolocation.coords.latitude, 0.2);
     }
 
 }
@@ -98,5 +101,10 @@ window.addEventListener("load", function () {
 
     navigator.geolocation.watchPosition(function(geolocation) {
         app.updatePlayerPosition(geolocation);
-    });
+    }/*, function() {}, { enableHighAccuracy: true }*/);
+
+    navigator.geolocation.getCurrentPosition(function(geolocation) {
+        app.updatePlayerPosition(geolocation);
+        app.goToPlayerPosition();
+    }/*, function() {}, { enableHighAccuracy: true }*/);
 });
