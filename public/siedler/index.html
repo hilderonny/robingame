@@ -1,85 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <!-- Use correct character set. -->
     <meta charset="utf-8">
-    <!-- Tell IE to use the latest, best version. -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <title>Hello World!</title>
+    <title>Liaga</title>
     <script src="Cesium/Cesium.js"></script>
-    <style>
-        @import url(Cesium/Widgets/widgets.css);
-        html,
-        body,
-        #cesiumContainer {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-    </style>
+    <script src="js/cesium.js"></script>
+    <link rel="stylesheet" href="siedler.css" type="text/css">
 </head>
 
 <body>
-    <div id="cesiumContainer"></div>
-    <script>
-        // Snadcastle demo: https://cesiumjs.org/Cesium/Build/Apps/Sandcastle/index.html#c=pVZRb+M2DP4rQh7ODi6V0xU4bEnaDW13uAAtUqC97uFyD4rMOEJlyZBkt97Q/z7KtuIkzQoU84sliqTITx8pVcyQSsAzGHJOFDyTK7CizOljI4sj3kyvtHJMKDDRiPyzVAQ/pkTOnNBqQtZMWhi14hWzcMNqMHeCP4HZX1yXUlpuANRl6dyhaWWOSZMkA811euhro3MI+s6UQSzUWl/ql31dy0HBLfo4FpQFCdwnMlep4Mzpg3UncpCY+75UsUpkTf7fQBbHAu815spihM0edq6EE0zK+lFYsZJwJNCz64WS9X5WOcvA1HdGVwKRIJNwTAgmc7AoQN07xNXdsmK+rxt35+W/0kg0jTbOFXaSJNaxHNSJExIsZdRaSdfMOllTBS55RseGa6lNEo16Hzl7EXmZ30AFckJOv3RLr8MAFxiDVAnbH0T6lzYyfWhVYm/yOpwu1VJ1YGlD8bSl5g1uFEPgmztthZ/F61I1GMZFJxkGLnIEVkugUmf94rRjFRK80EK5xXquMDiwDpneBXXFjNOZYcVGcLo2Or+GDGG0cZ9v8Ee51ia1uIfKhCtTGJF3lDD+Q53T8XhMx7uSnXLbDSQehtiThNyzvJBA3AYCsiRmtlZ8iBWYkmcjXLvKlPVF7HQzC4i0frpNbOMroN9WPT04rxH5bUR+vEHs55Ci250zaH3Z7REEqDcgso1HuFMgnz6F4Y/xz/0Z7ZR/PyKbEARr2vvePeLoW6uDWOSAAVoiLNKafO52H+7YdVlyZLphdC3rB71bEf5LMUGhGsb1heUPBEdMnf0HLz7Ej4/wJHwdEJ/JL+PxsF9+fTe7b9gVEfztMaWlYXul8gFc/j82H8bnoxi9g9MbrF6nYRQ61nTbfrDQHrBqPCj+mpDYexl/sk0pYZfEEtNroktDcqEEYUUhRdeilqrqbtDW8DwAvdZZw+FT3CTsgddoBcY1bnuTHPJVQ2KFxfukNH/SpSN6ZcFUbOV781J1yIdV2sQXb31ss7gU2BT23Xcd4XpxS/Cmw4bvrM/Gy77P8ccc4XghYcCGCNcl5LSWK+bfBKnmpTfCxuz+bO0v63kaR51K5Pc+DM8jVPtYhMpsH+Yo+G3jPbTCHRbbrHetIgQzGlJbrvD1IFbQtyFsoY9MlrDld8fr5iKlaEZTUMinGjMpmLHwVWrmerOeAu8YbiPx8ukRVc8KvBMvjWeiAmvRaEx/RdXBaDCzrpZw0Yb3h8gLjQzAmzimNHGAfQ/pZZNViS8TR7m1PpxZEoxmqaiISM+Xg4OX2HJAuGTW4op/Vt2Lv2E5uJglqL9nhvn6U1gg8SSrvcrm9OKmFVJKZwlO31p154TqbdzNStgvhVyf8D6Qi77IZq2j3SL8qjMyE6pATjdJoYNnkboNPh7OvhQvmIerCy81TGWYg68xnI39iL3g6JT6sXVQeLGvqAFJmWMnKyQYiip/khNfcCPSjL8XuIySqNk1wgDJzBZM7Vk5eHGNUYOaX77Id/JI+kS26HT/pfoX
-        
-        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNjcxOWU5NS03ZWQ4LTRjZjMtYmUyNi04MjE0ZjFiN2I0NjciLCJpZCI6MTQ3OCwiaWF0IjoxNTI4NjM0MzE5fQ.dgH-7CobMOwkmxJczcbVAqhLNNbu6WWl1r8bqv6ktao';
-
-        var viewer = new Cesium.Viewer('cesiumContainer', {
-            animation: false,
-            baseLayerPicker: false,
-            fullscreenButton: true,
-            vrButton: true,
-            geocoder: false,
-            homeButton: true,
-            infoBox: false,
-            sceneModePicker: false,
-            selectionIndicator: false,
-            timeline: false,
-            navigationHelpButton: false,
-            navigationInstructionsInitiallyVisible: false,
-            scene3DOnly: true,
-            imageryProvider: Cesium.createOpenStreetMapImageryProvider({
-                url: 'https://stamen-tiles.a.ssl.fastly.net/watercolor/',
-                maximumLevel: 16,
-            }),
-            terrainProvider: Cesium.createWorldTerrain(),
-        });
-
-        function flyToGeoLocation(geolocation) {
-            var pointOfInterest = Cesium.Cartographic.fromDegrees(
-                geolocation.coords.longitude,
-                geolocation.coords.latitude,
-                1000.0,
-                new Cesium.Cartographic());
-            Cesium.sampleTerrain(viewer.terrainProvider, 9, [pointOfInterest]).then(function (samples) {
-                var height = samples && samples[0] && samples[0].height ? samples[0].height : 0.0;
-                viewer.camera.flyTo({
-                    destination: Cesium.Cartesian3.fromDegrees(
-                        geolocation.coords.longitude,
-                        geolocation.coords.latitude,
-                        height + 500)
-                });
-            });
-        }
-
-        function goHome() {
-            navigator.geolocation.getCurrentPosition(flyToGeoLocation);
-        }
-
-        viewer.scene.fog.density = 0.02;
-
-        viewer.camera.flyHome = goHome;
-
-        goHome();
-
-    </script>
+    <div class="map" id="cesiumContainer"></div>
 </body>
 
 </html>

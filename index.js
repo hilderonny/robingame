@@ -16,6 +16,9 @@ var credentials = {
 
 var httpPort = process.env.HTTP_PORT || 80;
 var httpsPort = process.env.HTTPS_PORT || 443;
+var dbName = process.env.DB_NAME || "liaga";
+var dbUser = process.env.DB_USER || "postfix";
+var dbPassword = process.env.DB_PASSWORD || "postfix";
 
 var httpsServer = https.createServer(credentials, app);
 httpsServer.listen(httpsPort, function() {
