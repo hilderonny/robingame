@@ -6,13 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>Liaga</title>
-    <script src="Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="leaflet.css" />
+    <script src="js/leaflet.js"></script>
+    <link rel="stylesheet" href="liaga.css" />
     <script src="js/liaga/App.js"></script>
-    <link rel="stylesheet" href="liaga.css" type="text/css">
     <script>
         var app;
         window.addEventListener("load", function () {
             app = new App("map");
+            navigator.geolocation.getCurrentPosition(function (geolocation) {
+                app.setPlayerPosition(geolocation);
+                app.goToPlayerPosition();
+            }/*, function() {}, { enableHighAccuracy: true }*/);
         });
     </script>
 </head>
