@@ -10,7 +10,6 @@ class App {
             fullscreenButton: false,
             vrButton: false,
             geocoder: false,
-            homeButton: true,
             infoBox: false,
             sceneModePicker: false,
             selectionIndicator: false,
@@ -22,8 +21,7 @@ class App {
                 url: 'https://a.tile.openstreetmap.org/'
                 // url: 'https://stamen-tiles.a.ssl.fastly.net/watercolor/',
                 // maximumLevel: 16,
-            }),
-            // terrainProvider: Cesium.createWorldTerrain(),
+            })
         });
         this.viewer.scene.fog.density = 0.02;
         var self = this;
@@ -54,57 +52,27 @@ class App {
             }
         });
 
+        var self = this;
+        navigator.geolocation.watchPosition(function (geolocation) {
+            self.updatePlayerPosition(geolocation);
+        }/*, function() {}, { enableHighAccuracy: true }*/);
+
     }
 
     flyToGeoLocation(geolocation) {
-        var self = this;
-        var pointOfInterest = Cesium.Cartographic.fromDegrees(
-            geolocation.coords.longitude,
-            geolocation.coords.latitude,
-            1000.0,
-            new Cesium.Cartographic());
-        // Cesium.sampleTerrain(self.viewer.terrainProvider, 9, [pointOfInterest]).then(function (samples) {
-        //     var height = samples && samples[0] && samples[0].height ? samples[0].height : 0.0;
-        self.viewer.camera.flyTo({
-            destination: Cesium.Cartesian3.fromDegrees(
-                geolocation.coords.longitude,
-                geolocation.coords.latitude,
-                200
-                // height + 500
-            )
+        this.viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(geolocation.coords.longitude, geolocation.coords.latitude, 200)
         });
-        // });
     }
 
     goToPlayerPosition() {
-        console.log(this.playerLocation);
         if (this.playerLocation) this.flyToGeoLocation(this.playerLocation);
     }
 
     updatePlayerPosition(geolocation) {
         this.playerLocation = geolocation;
-        var position = Cesium.Cartesian3.fromDegrees(
-            geolocation.coords.longitude,
-            geolocation.coords.latitude,
-            0.1
-        );
         this.playerRadius.position = Cesium.Cartesian3.fromDegrees(geolocation.coords.longitude, geolocation.coords.latitude, 0.1);
         this.playerSpot.position = Cesium.Cartesian3.fromDegrees(geolocation.coords.longitude, geolocation.coords.latitude, 0.2);
     }
 
 }
-
-var app;
-
-window.addEventListener("load", function () {
-    app = new App("cesiumContainer");
-
-    navigator.geolocation.watchPosition(function(geolocation) {
-        app.updatePlayerPosition(geolocation);
-    }/*, function() {}, { enableHighAccuracy: true }*/);
-
-    navigator.geolocation.getCurrentPosition(function(geolocation) {
-        app.updatePlayerPosition(geolocation);
-        app.goToPlayerPosition();
-    }/*, function() {}, { enableHighAccuracy: true }*/);
-});

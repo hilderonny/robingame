@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>Liaga</title>
     <script src="Cesium/Cesium.js"></script>
-    <script src="js/cesium.js"></script>
-    <link rel="stylesheet" href="siedler.css" type="text/css">
+    <script src="js/liaga/App.js"></script>
+    <link rel="stylesheet" href="liaga.css" type="text/css">
+    <script>
+        var app;
+        window.addEventListener("load", function () {
+            app = new App("map");
+        });
+    </script>
 </head>
 
 <body>
-    <div class="map" id="cesiumContainer"></div>
+    <div id="map"></div>
+    <div id="toolbar">
+        <button class="home" onclick="app.goToPlayerPosition()"></button>
+    </div>
 </body>
 
 </html>
