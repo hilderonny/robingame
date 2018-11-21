@@ -8,7 +8,7 @@ router.get('/models', async(req, res) => {
 
 router.get('/models/:id', async(req, res) => {
     const result = await Db.query(`voxelhoxel`, `SELECT * FROM models WHERE id='${req.params.id}';`);
-    res.send(result.rows);
+    res.send(result.rowCount > 0 ? result.rows[0] : {});
 });
 
 router.post('/models', async(req, res) => {
