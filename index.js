@@ -12,6 +12,7 @@ const Db = require('./utils/db').Db;
     var app = express();
     app.use(express.static('./public'));
     app.use(require('body-parser').json());
+    app.use(require('cors')()); // https://stackoverflow.com/a/21622564
 
     app.use("/api/siedler/pokemon", require("./api/siedler/pokemon"));
     app.use("/api/voxel-hoxel/voxel-hoxel", require("./api/voxel-hoxel/voxel-hoxel"));
