@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/hilderonny/robingame#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.2",
+    "pg": "^7.6.1",
     "request": "^2.85.0"
   }
 }
