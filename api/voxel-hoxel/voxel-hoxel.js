@@ -7,12 +7,12 @@ router.get('/models', async(req, res) => {
 });
 
 router.get('/models/data/:id', async(req, res) => {
-    const result = await Db.query(`voxelhoxel`, `SELECT data FROM models WHERE id='${req.params.id}';`);
+    const result = await Db.query(`voxelhoxel`, `SELECT id, data FROM models WHERE id='${req.params.id}';`);
     res.send(result.rowCount > 0 ? result.rows[0] : {});
 });
 
 router.get('/models/thumbnail/:id', async(req, res) => {
-    const result = await Db.query(`voxelhoxel`, `SELECT thumbnail FROM models WHERE id='${req.params.id}';`);
+    const result = await Db.query(`voxelhoxel`, `SELECT id, thumbnail FROM models WHERE id='${req.params.id}';`);
     if (!result || result.rowCount < 1) return res.sendStatus(404);
     const parts = result.rows[0].thumbnail.split(',');
     const buffer = new Buffer(parts[1], 'base64');
