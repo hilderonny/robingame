@@ -2,13 +2,23 @@ const router = require('express').Router();
 const Db = require('../../utils/db').Db;
 
 router.get('/models', async(req, res) => {
-    const result = await Db.query(`voxelhoxel`, `SELECT id, name, thumbnail FROM models;`);
+    const result = await Db.query(`voxelhoxel`, `SELECT id, name FROM models;`);
     res.send(result.rows);
 });
 
-router.get('/models/:id', async(req, res) => {
-    const result = await Db.query(`voxelhoxel`, `SELECT * FROM models WHERE id='${req.params.id}';`);
+router.get('/models/data/:id', async(req, res) => {
+    const result = await Db.query(`voxelhoxel`, `SELECT data FROM models WHERE id='${req.params.id}';`);
     res.send(result.rowCount > 0 ? result.rows[0] : {});
+});
+
+router.get('/models/thumbnail/:id', async(req, res) => {
+    const result = await Db.query(`voxelhoxel`, `SELECT thumbnail FROM models WHERE id='${req.params.id}';`);
+    if (!result || result.rowCount < 1) return res.sendStatus(404);
+    const parts = result.rows[0].thumbnail.split(',');
+    const buffer = new Buffer(parts[1], 'base64');
+    const type = parts[0].split(';')[0].split(':')[1];
+    res.writeHead(200, {'Content-Type': type });
+    res.end(buffer, 'binary');
 });
 
 router.post('/models', async(req, res) => {
@@ -23,7 +33,7 @@ router.post('/models', async(req, res) => {
         if (keys.includes('name')) await Db.query(`voxelhoxel`, `UPDATE models SET name='${model.name}' WHERE id='${model.id}';`);
         if (keys.includes('thumbnail')) await Db.query(`voxelhoxel`, `UPDATE models SET thumbnail='${model.thumbnail}' WHERE id='${model.id}';`);
         if (model.data) await Db.query(`voxelhoxel`, `UPDATE models SET data='${JSON.stringify(model.data)}' WHERE id='${model.id}';`);
-        res.send(200);
+        res.send({ id: model.id });
     }
 });
 
